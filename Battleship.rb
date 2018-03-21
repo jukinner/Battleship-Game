@@ -69,7 +69,7 @@ def comp_select
 
     when 3
       # Aircraft Carrier
-          @computer['G3'] = 'A'
+          @computer['G8'] = 'A'
           @computer['G4'] = 'A'
           @computer['G5'] = 'A'
           @computer['G6'] = 'A'
@@ -78,8 +78,8 @@ def comp_select
     # Battleship
           @computer['E2'] = 'B'
           @computer['F2'] = 'B'
-          @computer['G2'] = 'B'
-          @computer['H2'] = 'B'
+          @computer['D2'] = 'B'
+          @computer['C2'] = 'B'
 
     # Cruiser
           @computer['G1'] = 'C'
@@ -129,11 +129,9 @@ end
 
 # returns true if shot is a hit
 def hit? which_board, coordinates
-  shot(which_board, coordinates) 
-  comp_input coordinates if which_board == @player
-  @com_shot_board.delete(coordinates) if which_board == @player
-  puts "hit" if which_board["#{coordinates}"] =~ /[ABCDS]/ 
-  true if which_board["#{coordinates}"] =~ /[X]/
+  shot(which_board, coordinates)
+  (which_board["#{coordinates}"] =~ /[ABCDSX]/) ? (puts 'hit') : (puts 'miss')
+  true if (which_board["#{coordinates}"] =~ /[ABCDSX]/)
 end
 
 def shot which_board, coordinates
@@ -212,26 +210,26 @@ def which_sunk result_of_attempt
   ships = {  "A" => "Aircraft Carrier", "B" => "Battleship", "C" => "Carrier","D" => "Destroyer", "S" => "Submarine" }
   i = 0
   c = 0
-  if result_of_attempt == true
+  if result_of_attempt == true || result_of_attempt == 'true' || result_of_attempt == "true"
     5.times do
       if @player.has_value?(ship_names[i]) == false && @player_sunk_ships.include?(ships.fetch_values(ship_names[i])) == false
         @player_sunk_ships << ships.fetch_values(ship_names[i])
-        @player_current_sunk_ship << ships.fetch_values(ship_names[i])
-        puts "You sunk a ship!:"
-        puts @player_current_sunk_ship
-        puts "And the total ships sunk is:"
-        puts @player_sunk_ships
+        @player_current_sunk_ship = ships.fetch_values(ship_names[i])
+        puts "The computer sunk a ship:"
+        puts @computer_current_sunk_ship
+        puts "And the total computer ships sunk is:"
+        puts @computer_sunk_ships
       end
     i = i + 1
     end
     5.times do
       if @computer.has_value?(ship_names[c]) == false && @computer_sunk_ships.include?(ships.fetch_values(ship_names[c])) == false
         @computer_sunk_ships << ships.fetch_values(ship_names[c])
-        @computer_current_sunk_ship << ships.fetch_values(ship_names[c])
-        puts "The computer sunk a ship:"
-        puts @computer_current_sunk_ship
-        puts "And the total computer ships sunk is:"
-        puts @computer_sunk_ships
+        @computer_current_sunk_ship = ships.fetch_values(ship_names[c])
+        puts "You sunk a ship!:"
+        puts @player_current_sunk_ship
+        puts "And the total ships sunk is:"
+        puts @player_sunk_ships
       end
     c = c + 1
     end
